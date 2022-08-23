@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import { calculaSalarioIr, calculaSalarioIrpf, verificaCamposVazios } from "../../common/functions"
 import { Botao } from "../../components/Botao"
@@ -11,6 +11,7 @@ import * as funcionariosActions from '../../store/modules/funcionarios/actions'
 import { IFuncionario, IStateResponse } from "../../store/modules/types"
 
 export const EmployeeView = () => {
+    const navigate = useNavigate()
     const { id } = useParams()
     const dispatch = useDispatch()
     const [nome, setNome] = useState('')
@@ -20,29 +21,32 @@ export const EmployeeView = () => {
     const [dependentes, setDependentes] = useState('')
     const title = id ? 'Editar funcionário' : 'Cadastro de funcionário'
 
-    const carregaFuncionario = () => {
-        useSelector((state: IStateResponse) => {
-            const funcionario = state.funcionarioReducer.funcionarioStore.find((funcionario: IFuncionario) => funcionario.id === id)
+    useSelector((state: IStateResponse) => {
+        const funcionario = state.funcionarioReducer.funcionarioStore.find((funcionario: IFuncionario) => funcionario.id === id) as IFuncionario
+        useEffect(() => {
             if (funcionario) {
-                useEffect(() => {
-                    setNome(funcionario.nome)
-                    setCpf(funcionario.cpf)
-                    setSalario(String(funcionario.salario))
-                    setDesconto(String(funcionario.desconto))
-                    setDependentes(String(funcionario.dependentes))
-                }, [id])
-            }
-        })
-    }
+                setNome(funcionario.nome)
+                setCpf(funcionario.cpf)
+                setSalario(String(funcionario.salario))
+                setDesconto(String(funcionario.desconto))
+                setDependentes(String(funcionario.dependentes))
 
-    if(id) carregaFuncionario()
+            }
+            else{
+                setNome('')
+                setCpf('')
+                setSalario('')
+                setDesconto('')
+                setDependentes('')
+            }
+        }, [id])
+    })
 
     const handleClick = () => {
         const salarioIr = calculaSalarioIr(Number(salario), Number(desconto), Number(dependentes))
         const descontoIrpf = calculaSalarioIrpf(salarioIr)
 
         const funcionario: IFuncionario = {
-            id: id ? id : '',
             nome,
             cpf,
             salario,
@@ -55,7 +59,10 @@ export const EmployeeView = () => {
             toast.error('Preencha todos os campos antes de enviar o formulário')
         }
         else {
+            //envio o id aqui, senão cai na verificação como campo vazio, caso exista ele edita, se não gera um novo na ação de salvar
+            funcionario.id = id ? id : ''
             dispatch(funcionariosActions.funcionarioRequest(funcionario))
+            navigate('/irrf', { replace: true})
         }
 
     }
