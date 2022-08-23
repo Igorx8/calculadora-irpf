@@ -30,16 +30,12 @@ export const EmployeeView = () => {
                     setSalario(String(funcionario.salario))
                     setDesconto(String(funcionario.desconto))
                     setDependentes(String(funcionario.dependentes))
-                }, [])
+                }, [id])
             }
         })
-
     }
 
-    if (id) {
-        carregaFuncionario()
-    }
-
+    if(id) carregaFuncionario()
 
     const handleClick = () => {
         const salarioIr = calculaSalarioIr(Number(salario), Number(desconto), Number(dependentes))
