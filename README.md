@@ -1,6 +1,6 @@
 # teste-react-seidor
 
-###Para usar o projeto, basta rodar os comandos
+### Para usar o projeto, basta rodar os comandos
 ```npm install```
 e
 ```npm run dev```
