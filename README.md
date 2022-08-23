@@ -5,7 +5,7 @@
 e
 ```npm run dev```
 
-O projeto foi configurado para rodar em mobile e desktop.
+O projeto está responsivo para mobile e desktop.
 
 Os dados são persistidos com redux-saga, as rotas são controladas pelo react-router-dom na versão 6.
 
