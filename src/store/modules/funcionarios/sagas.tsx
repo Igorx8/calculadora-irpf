@@ -2,14 +2,16 @@ import { put, all, takeLatest, call, select } from 'redux-saga/effects';
 import * as actions from './actions';
 import * as types from '../types';
 
-const funcionarios = (state: types.IState) => state.funcionarios;
+const funcionarios = (state: types.IState) => state.funcionarioStore;
 
 function* salvarFuncionarioRequest({ payload }: types.IGeneratorResponse) {
     try {
         if(payload.id) {
             yield put(actions.editarFuncionario(payload))
         }
-        yield put(actions.salvarFuncionario(payload));
+        else {
+            yield put(actions.salvarFuncionario(payload));
+        }
     } catch (error) {
         yield put(actions.funcionarioError());
     }

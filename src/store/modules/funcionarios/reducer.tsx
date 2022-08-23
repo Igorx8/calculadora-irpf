@@ -15,6 +15,8 @@ export default function funcionariosReducer(state = initialState, action: Payloa
                 ...state
             };
             case types.ACTION_FUNCIONARIO_SALVAR_SUCESSO:
+                action.payload.id = String(Date.now()),
+
                 toast.success('Funcionário salvo com sucesso');
                 return {
                 ...state,
@@ -23,11 +25,11 @@ export default function funcionariosReducer(state = initialState, action: Payloa
         case types.ACTION_FUNCIONARIO_EDITADO_SUCESSO:
             const estadoEditar = { ...state };
             const index = estadoEditar.funcionarioStore.findIndex((funcionario: IFuncionario) => funcionario.id === action.payload.id);
-            if (index) {
+            if (index || index == 0) {
                 estadoEditar.funcionarioStore[index] = action.payload;
                 toast.success('Funcionário editado com sucesso');
                 return {
-                    estadoEditar
+                    ...estadoEditar
                 };
             }
 
@@ -36,11 +38,11 @@ export default function funcionariosReducer(state = initialState, action: Payloa
         case types.ACTION_FUNCIONARIO_REMOVIDO_SUCESSO:
             const estadoDelete = { ...state };
             const idx = estadoDelete.funcionarioStore.findIndex((funcionario: IFuncionario) => funcionario.id === action.payload.id);
-            if (idx) {
+            if (idx || idx == 0) {
                 estadoDelete.funcionarioStore.splice(idx, 1);
                 toast.success('Funcionário removido com sucesso');
                 return {
-                    estadoDelete
+                    ...estadoDelete
                 };
             }
 

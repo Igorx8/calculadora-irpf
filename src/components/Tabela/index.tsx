@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPen, FaTrash } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom';
 
@@ -7,13 +7,14 @@ interface ITableProps {
     tableFields: string[]
     tableData: Record<string, string | number>[];
     enableActions: boolean;
+    removeAction: (data: any) => void;
     route: string;
 }
 
 
 export const Tabela: React.FC<ITableProps> = (props) => {
     const navigate = useNavigate()
-    const itemsPerPage = 7
+    const itemsPerPage = 5
     const totalItems = props.tableData.length
     const totalPages = Math.ceil(totalItems / itemsPerPage)
     const arrayPages = []
@@ -29,17 +30,12 @@ export const Tabela: React.FC<ITableProps> = (props) => {
         setTableDataFiltered(props.tableData.slice(selectedPage * itemsPerPage, selectedPage * itemsPerPage + itemsPerPage))
     }
 
-    // coloquei essa 'gambiarra' pois não consegui fazer renderizar os itens assim que a página carregava, tentei de várias formas
-    setTimeout(() => {
-        changePage(0)
-    }, 500)
-    
-    const remove = (id: string | number) => {
+    useEffect(() => {
+        if(props.tableData) changePage(0)
+    }, [props.tableData])
         
-    }
-    
     return (
-        <div className="flex justify-center items-center flex-col">
+        <div className="flex justify-center items-center flex-col overflow-scroll md:overflow-hidden">
             <table className="table-auto text-xs">
                 <thead>
                     <tr>
@@ -54,7 +50,7 @@ export const Tabela: React.FC<ITableProps> = (props) => {
                         return (
                             <tr key={index}>
                                 {props.tableFields.map((field, idx) => {
-                                    return (
+                                    if(field !== 'id') return (
                                         <td key={idx} className="border md:px-6 md:py-2">{data[field]}</td>
                                     )
                                 })}
@@ -64,7 +60,7 @@ export const Tabela: React.FC<ITableProps> = (props) => {
                                             <FaPen className="text-blue-400" onClick={() => navigate(props.route+'/'+data?.id)}/>
                                         </button>
                                         <button>
-                                            <FaTrash className="text-red-400" onClick={() => remove(data.id)}/>
+                                            <FaTrash className="text-red-400" onClick={() => props.removeAction(data)}/>
                                         </button>
                                     </td> : ''
                                 }

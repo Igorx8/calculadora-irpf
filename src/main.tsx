@@ -21,8 +21,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Routes>
             <Route path="/" element={<IrffView />} />
             <Route path="/irrf" element={<IrffView />} />
-            <Route path="/employee" element={<EmployeeView />} />
-            <Route path="/employee/:id" element={<EmployeeView />} />
+            <Route path="/employee" element={<EmployeeView />}>
+              <Route path=":id" element={<EmployeeView />} />
+            </Route>
           </Routes>
           <ToastContainer autoClose={3000}/>
         </BrowserRouter>

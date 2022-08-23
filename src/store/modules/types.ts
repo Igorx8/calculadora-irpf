@@ -7,12 +7,12 @@ export const ACTION_FUNCIONARIO_REQUEST_EXCLUIR = 'ACTION_FUNCIONARIO_REQUEST_EX
 export const ACTION_FUNCIONARIO_ERROR = 'ACTION_FUNCIONARIO_ERROR';
 
 export interface IFuncionario {
-    id?: number;
+    id?: string;
     nome: string;
     cpf: string;
-    salario: number;
-    desconto: number;
-    dependentes: number;
+    salario: string | number;
+    desconto: string | number;
+    dependentes: string | number;
     descontoIrpf: number;
 }
 
