@@ -41,3 +41,45 @@ export const verificaCamposVazios = (objeto: any) => {
 
     return vazio
 }
+
+export function validaCPF(cpfEnviado: string){
+    const cpfLimpo = cpfEnviado.replace(/\D+/g, '');  //remove tudo que não for número
+
+    const isSequencia = () => {
+        return cpfLimpo[0].repeat(cpfLimpo.length ) === cpfLimpo;
+    }
+
+    const criaDigito = (partialCpf: string) => {
+        const cpfArray = Array.from(partialCpf);
+        let regressivo = cpfArray.length + 1;
+        const total = cpfArray.reduce((ac, val) => {
+          ac += (regressivo * Number(val));
+          regressivo--;
+          return ac;
+        }, 0);
+      
+        const digito = 11 - (total % 11);
+        return digito > 9 ? '0' : String(digito); 
+    }
+
+    if(cpfLimpo === 'undefined') return false;
+    if(cpfLimpo.length != 11) return false;
+    if(isSequencia()) return false;
+  
+    const cpfParcial = cpfLimpo.slice(0, -2);
+    const digito1 = criaDigito(cpfParcial);
+    const digito2 = criaDigito(cpfParcial + digito1);
+  
+    const novoCpf = cpfParcial + digito1 + digito2;
+  
+    return novoCpf === cpfLimpo;
+}
+    
+    const cpf = validaCPF('705.484.450-52');
+  
+  if(cpf){
+    console.log('CPF válido');
+  }
+  else{
+    console.log('CPF inválido');
+  }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
-import { calculaSalarioIr, calculaSalarioIrpf, verificaCamposVazios } from "../../common/functions"
+import { calculaSalarioIr, calculaSalarioIrpf, validaCPF, verificaCamposVazios } from "../../common/functions"
 import { Botao } from "../../components/Botao"
 import { Input } from "../../components/Input"
 import { DefaultTemplate } from "../../components/Template"
@@ -59,10 +59,15 @@ export const EmployeeView = () => {
             toast.error('Preencha todos os campos antes de enviar o formulário')
         }
         else {
-            //envio o id aqui, senão cai na verificação como campo vazio, caso exista ele edita, se não gera um novo na ação de salvar
-            funcionario.id = id ? id : ''
-            dispatch(funcionariosActions.funcionarioRequest(funcionario))
-            navigate('/irrf', { replace: true})
+            if(!validaCPF(funcionario.cpf)){
+                toast.error('Cpf inválido')
+            }
+            else{
+                //envio o id aqui, senão cai na verificação como campo vazio, caso exista ele edita, se não gera um novo na ação de salvar
+                funcionario.id = id ? id : ''
+                dispatch(funcionariosActions.funcionarioRequest(funcionario))
+                navigate('/irrf', { replace: true})
+            }
         }
 
     }
@@ -72,7 +77,7 @@ export const EmployeeView = () => {
             <Titulo title={title} />
             <div className="lg:grid lg:grid-cols-2 xl:grid-cols-3">
                 <Input label="Nome" labelFor="nome" type="text" placeholder="Digite o nome" setValue={setNome} value={nome} />
-                <Input label="CPF" labelFor="cpf" type="text" placeholder="Digite o cpf" setValue={setCpf} value={cpf} />
+                <Input label="CPF" labelFor="cpf" type="text" placeholder="Digite apenas números" setValue={setCpf} value={cpf} maxLength={11} />
                 <Input label="Salário bruto" labelFor="salariob" type="number" placeholder="Digite o salário bruto" setValue={setSalario} value={salario} />
                 <Input label="Desconto da previdência" labelFor="descontop" type="number" placeholder="Digite o valor do desconto" setValue={setDesconto} value={desconto} />
                 <Input label="Nº de dependentes" labelFor="ndependentes" type="number" placeholder="Digite o número de dependentes" setValue={setDependentes} value={dependentes} />

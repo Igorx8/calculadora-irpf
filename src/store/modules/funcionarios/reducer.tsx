@@ -15,6 +15,7 @@ export default function funcionariosReducer(state = initialState, action: Payloa
                 ...state
             };
             case types.ACTION_FUNCIONARIO_SALVAR_SUCESSO:
+                action.payload.id = String(Date.now())
                 toast.success('Funcionário salvo com sucesso');
                 return {
                 ...state,
