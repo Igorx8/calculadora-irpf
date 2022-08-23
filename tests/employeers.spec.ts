@@ -23,3 +23,11 @@ test('Testando a funcao verificaCamposVazios', () => {
     const existeCampoVazio = funcao.verificaCamposVazios(funcionario3)
     expect(existeCampoVazio).toBe(false)
 })
+
+test('Testando a funcao de validar cpf', () => {
+    const cpfInvalido = '111.222.333-55'
+    expect(funcao.validaCPF(cpfInvalido)).toBe(false)
+
+    const cpfValido = '904.239.150-29' //cpf gerado aleatóriamente na internet
+    expect(funcao.validaCPF(cpfValido)).toBe(true)
+})
