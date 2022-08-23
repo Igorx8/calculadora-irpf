@@ -74,12 +74,3 @@ export function validaCPF(cpfEnviado: string){
   
     return novoCpf === cpfLimpo;
 }
-    
-    const cpf = validaCPF('705.484.450-52');
-  
-  if(cpf){
-    console.log('CPF válido');
-  }
-  else{
-    console.log('CPF inválido');
-  }
