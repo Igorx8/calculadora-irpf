@@ -1,4 +1,4 @@
-# teste-react-seidor
+# Calculadora irpf com react react-redux e redux-saga
 
 ### Para usar o projeto, basta rodar os comandos
 ```npm install```
